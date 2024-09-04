@@ -7,7 +7,7 @@ const loginRouter = require('./login');
 const app = express();
 const port = 8000;
 
-app.use(cors({origin: '', credentials: true}));
+app.use(cors({origin: 'https://reactpractice-3wnt.onrender.com', credentials: true}));
 
 const logger = winston.createLogger({
   level: 'info',
