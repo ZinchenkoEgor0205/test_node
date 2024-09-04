@@ -7,7 +7,7 @@ const loginRouter = require('./login');
 const app = express();
 const port = 3000;
 
-app.use(cors());
+app.use(cors({credentials: true}));
 
 const logger = winston.createLogger({
   level: 'info',

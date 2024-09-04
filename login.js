@@ -65,15 +65,15 @@ router.post('/', (req, res) => {
     res.set("password", password)
 
     res.cookie('login', login, {
-        httpOnly: true, // Cannot be accessed via JavaScript
-        secure: true,   // Ensure it is sent over HTTPS
-        sameSite: 'lax', // Prevent CSRF attacks
+        httpOnly: false, // Cannot be accessed via JavaScript
+        secure: false,   // Ensure it is sent over HTTPS
+        sameSite: 'None', // Prevent CSRF attacks
     });
 
     res.cookie('password', password, {
-        httpOnly: true, // Cannot be accessed via JavaScript
-        secure: true,   // Ensure it is sent over HTTPS
-        sameSite: 'lax', // Prevent CSRF attacks
+        httpOnly: false, // Cannot be accessed via JavaScript
+        secure: false,   // Ensure it is sent over HTTPS
+        sameSite: 'None', // Prevent CSRF attacks
     });
 
     res.status(201).json(user);
