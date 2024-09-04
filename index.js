@@ -5,9 +5,9 @@ const { swaggerUi, swaggerSpec } = require('./swagger');
 const loginRouter = require('./login');
 
 const app = express();
-const port = 3000;
+const port = 8000;
 
-app.use(cors({credentials: true}));
+app.use(cors({origin: '', credentials: true}));
 
 const logger = winston.createLogger({
   level: 'info',
