@@ -1,7 +1,9 @@
 const express = require('express');
 const winston = require('winston');
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
 
+// Add cookie-parser middleware
 
 const {swaggerUi, swaggerSpec} = require('./swagger');
 const loginRouter = require('./login');
@@ -10,6 +12,7 @@ const protectedRouter = require('./protected')
 const app = express();
 const port = 8000;
 
+app.use(cookieParser());
 app.use(cors({origin: 'https://reactpractice-3wnt.onrender.com', credentials: true}));
 
 const logger = winston.createLogger({
