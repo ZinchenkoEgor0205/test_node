@@ -57,7 +57,9 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    res.json({ url: req.get('host') });
+    const a = req.originalUrl
+    console.log(a)
+    res.json({ url: a });
 });
 
 
