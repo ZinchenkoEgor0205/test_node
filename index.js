@@ -45,6 +45,7 @@ app.use((req, res, next) => {
 });
 
 
+
 app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -57,8 +58,8 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
+
     const a = req.cookies
-    console.log(req)
     res.json(a);
 });
 

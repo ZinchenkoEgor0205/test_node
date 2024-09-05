@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const CREDENTIALS = require('./credentials');
+const db = require("./models");
 
 
 const users = [
@@ -54,7 +55,14 @@ router.post('/register', async (req, res) => {
     const {username, password} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    users.push({username, password: hashedPassword});
+    // users.push({username, password: hashedPassword});
+
+    db.sequelize.models.User.create({
+        username: username,
+        password: hashedPassword
+    }).then(user => {
+        console.log('User created:', user.toJSON());
+    });
     const token = jwt.sign({username: username}, CREDENTIALS.jwtSecret, {expiresIn: '1h'});
     res.cookie('token', token)
     res.json({message: 'User registered successfully', token: token});
@@ -87,9 +95,12 @@ router.post('/register', async (req, res) => {
  */
 router.post('/login', async (req, res) => {
     const {username, password} = req.body;
-    console.log(username)
-    console.log(users)
-    const user = users.find(u => u.username === username);
+    const user = await db.sequelize.models.User.findOne({
+        where: {
+            username: username // Specify the username condition
+        }
+    });
+    // const user = users.find(u => u.username === username);
     if (!user) {
         return res.status(400).json({message: 'Invalid username or password'});
     }
