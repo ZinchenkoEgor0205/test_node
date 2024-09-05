@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const CREDENTIALS = require('./credentials');
+
 
 
 const users = [
@@ -11,7 +13,6 @@ const users = [
     }
 ];
 
-const JWT_SECRET = 'gachi_muchi';
 
 
 /**
@@ -26,10 +27,9 @@ const JWT_SECRET = 'gachi_muchi';
  *         password:
  *           type: string
  */
-
 /**
  * @swagger
- * /register:
+ * auth/register:
  *   post:
  *     summary: Registers a new user
  *     description: This endpoint registers a new user and hashes their password.
@@ -62,7 +62,7 @@ router.post('/register', async (req, res) => {
 
 /**
  * @swagger
- * /login:
+ * auth/login:
  *   post:
  *     summary: Logs in a user
  *     description: This endpoint logs in a user and returns a JWT token.
@@ -100,7 +100,7 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({message: 'Invalid username or password'});
     }
 
-    const token = jwt.sign({username: user.username}, 'your_jwt_secret_key', {expiresIn: '1h'});
+    const token = jwt.sign({username: user.username}, CREDENTIALS.jwtSecret, {expiresIn: '1h'});
     res.json({token});
 });
 

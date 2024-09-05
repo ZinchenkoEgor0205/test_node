@@ -5,6 +5,7 @@ const cors = require('cors')
 
 const { swaggerUi, swaggerSpec } = require('./swagger');
 const loginRouter = require('./login');
+const protectedRouter = require('./protected')
 
 const app = express();
 const port = 8000;
@@ -44,6 +45,8 @@ app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/auth', loginRouter);
+app.use('/protected', protectedRouter);
+
 
 app.listen(port, () => {
   console.log(`API server listening at http://localhost:${port}`);
