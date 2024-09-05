@@ -5,14 +5,12 @@ const bcrypt = require('bcryptjs');
 const CREDENTIALS = require('./credentials');
 
 
-
 const users = [
     {
         username: 'user1',
         password: '$2a$10$6Z3LOCnoJkZOeIvE16SzmOk7UHDbL4UCymCL9RJIAqblrKhTJ46O6' // hashed version of "password123"
     }
 ];
-
 
 
 /**
@@ -57,7 +55,9 @@ router.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     users.push({username, password: hashedPassword});
-    res.json({message: 'User registered successfully'});
+    const token = jwt.sign({username: username}, CREDENTIALS.jwtSecret, {expiresIn: '1h'});
+    res.cookie('token', token)
+    res.json({message: 'User registered successfully', token: token});
 });
 
 /**
