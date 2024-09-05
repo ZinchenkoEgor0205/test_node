@@ -13,7 +13,7 @@ const app = express();
 const port = 8000;
 
 app.use(cookieParser());
-app.use(cors({origin: 'https://reactpractice-3wnt.onrender.com', credentials: true, sameSite: 'None'}));
+app.use(cors({origin: true, credentials: true, sameSite: 'None'}));
 
 const logger = winston.createLogger({
     level: 'info',
