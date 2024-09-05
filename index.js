@@ -56,5 +56,9 @@ app.listen(port, () => {
     console.log(`API server listening at http://localhost:${port}`);
 });
 
+app.get('/', (req, res) => {
+    res.json({ url: req.get('host') });
+});
+
 
 module.exports = app;
