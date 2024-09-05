@@ -57,9 +57,9 @@ app.listen(port, () => {
 });
 
 app.get('/', (req, res) => {
-    const a = req.originalUrl
+    const a = req.cookies
     console.log(a)
-    res.json({ url: a });
+    res.json(a);
 });
 
 
