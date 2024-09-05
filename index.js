@@ -1,6 +1,8 @@
 const express = require('express');
 const winston = require('winston');
 const cors = require('cors')
+
+
 const { swaggerUi, swaggerSpec } = require('./swagger');
 const loginRouter = require('./login');
 
@@ -41,10 +43,13 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/api/login', loginRouter);
+app.use('/auth', loginRouter);
 
 app.listen(port, () => {
   console.log(`API server listening at http://localhost:${port}`);
 });
+
+
+
 
 module.exports = app;

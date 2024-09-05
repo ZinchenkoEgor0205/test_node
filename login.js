@@ -1,5 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+
+const users = [
+    {
+        username: 'user1',
+        password: '$2a$10$6Z3LOCnoJkZOeIvE16SzmOk7UHDbL4UCymCL9RJIAqblrKhTJ46O6' // hashed version of "password123"
+    }
+];
+
+const JWT_SECRET = 'gachi_muchi';
+
 
 /**
  * @swagger
@@ -7,34 +20,19 @@ const router = express.Router();
  *   schemas:
  *     User:
  *       type: object
- *       required:
- *         - login
- *         - password
  *       properties:
- *         login:
+ *         username:
  *           type: string
- *           description: The user's login
  *         password:
  *           type: string
- *           description: The user's password
- *       example:
- *         login: 'user123'
- *         password: 'password123'
  */
 
 /**
  * @swagger
- * tags:
- *   name: Auth
- *   description: User authentication
- */
-
-/**
- * @swagger
- * /api/login:
+ * /register:
  *   post:
- *     summary: Login a user
- *     tags: [Auth]
+ *     summary: Registers a new user
+ *     description: This endpoint registers a new user and hashes their password.
  *     requestBody:
  *       required: true
  *       content:
@@ -42,41 +40,69 @@ const router = express.Router();
  *           schema:
  *             $ref: '#/components/schemas/User'
  *     responses:
- *       201:
- *         description: User logged in successfully
+ *       200:
+ *         description: User registered successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  *       400:
- *         description: Login and password are required
+ *         description: Bad request
  */
-router.post('/', (req, res) => {
-    const {login, password} = req.body;
+router.post('/register', async (req, res) => {
+    const {username, password} = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (!login || !password) return res.status(400).send('Login and password are required');
-
-    const user = {
-        login,
-        password
-    };
-
-    res.set("login", login)
-    res.set("password", password)
-
-    res.cookie('login', login, {
-        httpOnly: true, // Cannot be accessed via JavaScript
-        secure: true,   // Ensure it is sent over HTTPS
-        sameSite: 'None', // Prevent CSRF attacks
-    });
-
-    res.cookie('password', password, {
-        httpOnly: true, // Cannot be accessed via JavaScript
-        secure: true,   // Ensure it is sent over HTTPS
-        sameSite: 'None', // Prevent CSRF attacks
-    });
-
-    res.status(201).json(user);
+    users.push({username, password: hashedPassword});
+    res.json({message: 'User registered successfully'});
 });
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Logs in a user
+ *     description: This endpoint logs in a user and returns a JWT token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: JWT token generated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Invalid username or password
+ */
+router.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    console.log(username)
+    console.log(users)
+    const user = users.find(u => u.username === username);
+    if (!user) {
+        return res.status(400).json({message: 'Invalid username or password'});
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log(await bcrypt.hash(password, 10))
+    if (!isMatch) {
+        return res.status(400).json({message: 'Invalid username or password'});
+    }
+
+    const token = jwt.sign({username: user.username}, 'your_jwt_secret_key', {expiresIn: '1h'});
+    res.json({token});
+});
+
 
 module.exports = router;
