@@ -51,6 +51,7 @@ const users = [
  *         description: Bad request
  */
 router.post('/register', async (req, res) => {
+    console.log(req.get('host'))
     const {username, password} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
