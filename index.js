@@ -3,7 +3,7 @@ const winston = require('winston');
 const cors = require('cors')
 
 
-const { swaggerUi, swaggerSpec } = require('./swagger');
+const {swaggerUi, swaggerSpec} = require('./swagger');
 const loginRouter = require('./login');
 const protectedRouter = require('./protected')
 
@@ -13,31 +13,32 @@ const port = 8000;
 app.use(cors({origin: 'https://reactpractice-3wnt.onrender.com', credentials: true}));
 
 const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-  ],
+    level: 'info',
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.json()
+    ),
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({filename: 'logs/combined.log'}),
+    ],
 });
 
 app.use((req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    logger.info({
-      method: req.method,
-      url: req.url,
-      status: res.statusCode,
-      duration: `${duration}ms`,
-      requestBody: req.body,
-      responseBody: res.locals.responseData // Assuming you've saved the response data in res.locals
+    const start = Date.now();
+    res.on('finish', () => {
+        const duration = Date.now() - start;
+        logger.info({
+            method: req.method,
+            url: req.url,
+            status: res.statusCode,
+            duration: `${duration}ms`,
+            requestBody: req.body,
+            responseBody: res.locals.responseData, // Assuming you've saved the response data in res.locals
+            requestOrigin: req.headers.origin // Log the request origin URL
+        });
     });
-  });
-  next();
+    next();
 });
 
 
@@ -49,10 +50,8 @@ app.use('/protected', protectedRouter);
 
 
 app.listen(port, () => {
-  console.log(`API server listening at http://localhost:${port}`);
+    console.log(`API server listening at http://localhost:${port}`);
 });
-
-
 
 
 module.exports = app;
