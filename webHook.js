@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 
-    console.log(req.params['hub.challenge'])
-    res.json(req.params['hub.challenge']);
+    console.log(req.params)
+    res.json(req.params);
 });
 
 module.exports = router
