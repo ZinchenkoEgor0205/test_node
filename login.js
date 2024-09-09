@@ -6,14 +6,6 @@ const CREDENTIALS = require('./credentials');
 // const db = require("./models");
 
 
-const users = [
-    {
-        username: 'user1',
-        password: '$2a$10$6Z3LOCnoJkZOeIvE16SzmOk7UHDbL4UCymCL9RJIAqblrKhTJ46O6' // hashed version of "password123"
-    }
-];
-
-
 /**
  * @swagger
  * components:
