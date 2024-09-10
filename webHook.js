@@ -4,8 +4,7 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    console.log(req.query['hub.challenge']);
-    console.log(req.query['hub.challenge'])
+    console.log(req.body);
     res.send(req.query['hub.challenge'])
 });
 
