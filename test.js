@@ -16,10 +16,9 @@ const filters = {
     address: '',
     roomCount: 0
 }
-
+let assistant
 async function main() {
-    console.log(instructions)
-    const assistant = await openai.beta.assistants.create({
+    assistant = await openai.beta.assistants.create({
         name: "Property seller",
         instructions: instructions,
         tools: [{type: "code_interpreter"}],
@@ -75,10 +74,15 @@ async function main() {
                             filters[key] = parsedAnswer[key];
                         }
                     });
-                    instructions = "You are a property seller. Ask the client for other preferences. don't repeat your question. don't point to preferences directly";
-                    console.log('\nBudget data provided:', parsedAnswer);
-                    console.log(filters)
-                    assistantResponse = '';
+                    instructions = "You are a property seller. Ask the client for other preferences. Don't repeat your question. Don't point to preferences directly.";
+                    const newAssistant = await openai.beta.assistants.create({
+                        name: "Property seller",
+                        instructions: instructions,
+                        tools: [{type: "code_interpreter"}],
+                        model: "gpt-4o-mini",
+                        temperature: 0.9
+                    });
+                    assistant = newAssistant;
                     await sendMessage('follow your new instructions');
                 } else {
                     console.log('No filter data detected.');
