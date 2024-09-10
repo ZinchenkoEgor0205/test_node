@@ -75,14 +75,13 @@ async function main() {
                         }
                     });
                     instructions = "You are a property seller. Ask the client for other preferences. Don't repeat your question. Don't point to preferences directly.";
-                    const newAssistant = await openai.beta.assistants.create({
+                    assistant = await openai.beta.assistants.create({
                         name: "Property seller",
                         instructions: instructions,
                         tools: [{type: "code_interpreter"}],
                         model: "gpt-4o-mini",
                         temperature: 0.9
                     });
-                    assistant = newAssistant;
                     await sendMessage('follow your new instructions');
                 } else {
                     console.log('No filter data detected.');
