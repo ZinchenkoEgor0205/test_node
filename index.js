@@ -3,8 +3,6 @@ const winston = require('winston');
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 
-// Add cookie-parser middleware
-
 const {swaggerUi, swaggerSpec} = require('./swagger');
 const loginRouter = require('./login');
 const protectedRouter = require('./protected')
@@ -38,8 +36,8 @@ app.use((req, res, next) => {
             status: res.statusCode,
             duration: `${duration}ms`,
             requestBody: req.body,
-            responseBody: res.locals.responseData, // Assuming you've saved the response data in res.locals
-            requestOrigin: req.headers.origin // Log the request origin URL
+            responseBody: res.locals.responseData,
+            requestOrigin: req.headers.origin
         });
     });
     next();

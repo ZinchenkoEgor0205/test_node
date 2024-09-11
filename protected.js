@@ -6,14 +6,14 @@ const CREDENTIALS = require('./credentials');
 
 
 const authenticateToken = (req, res, next) => {
-    const token = req.cookies['token'];  // Extract token from cookies
+    const token = req.cookies['token'];
     if (!token) return res.status(401).json({ message: 'Token is missing' });
 
     jwt.verify(token, CREDENTIALS.jwtSecret, (err, user) => {
         if (err) return res.status(403).json({ message: 'Invalid token' });
 
-        req.user = user;  // Attach user info to the request
-        next();  // Continue to the next middleware or route handler
+        req.user = user;
+        next();
     });
 };
 
@@ -48,7 +48,6 @@ const authenticateToken = (req, res, next) => {
  *         description: Forbidden, token is invalid or expired
  */
 router.get('/', authenticateToken, (req, res) => {
-    // If the token is valid, the request proceeds to this point
     res.json({ message: 'This is a protected route', user: req.user });
 });
 
