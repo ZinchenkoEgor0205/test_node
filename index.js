@@ -7,6 +7,8 @@ const {swaggerUi, swaggerSpec} = require('./swagger');
 const loginRouter = require('./login');
 const protectedRouter = require('./protected')
 const webhookRouter = require('./webHook')
+const clientRouter = require('./clients');
+const analyticsRouter = require('./orders');
 
 const app = express();
 const port = 8000;
@@ -50,7 +52,9 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/auth', loginRouter);
 app.use('/protected', protectedRouter);
-app.use('/webhook', webhookRouter)
+app.use('/webhook', webhookRouter);
+app.use('/clients', clientRouter);
+app.use('/orders', analyticsRouter);
 
 
 app.listen(port, () => {
