@@ -51,7 +51,7 @@ async function sendMessage(userId, messageContent) {
         })
             .on('textDelta', (textDelta) => {
                 process.stdout.write(textDelta.value);
-                assistantResponse += textDelta.value;  // Append the response text
+                assistantResponse += textDelta.value;
             })
             .on('end', () => {
                 console.log(`\nassistantResponse for ${userId}: ` + assistantResponse);
@@ -116,7 +116,7 @@ async function callAssistant(userId) {
         input: process.stdin,
         output: process.stdout
     });
-    if (!Object.keys(userSessions).length) {
+    if (!userSessions.hasOwnProperty(userId) || !Object.keys(userSessions).length) {
         await createNewSession(userId);
     }
     askQuestion(userId, rl)
