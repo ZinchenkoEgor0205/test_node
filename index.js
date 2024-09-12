@@ -9,7 +9,7 @@ const protectedRouter = require('./protected')
 const webhookRouter = require('./webHook')
 
 const app = express();
-const port = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.use(cookieParser());
 app.use(cors({origin: true, credentials: true, sameSite: 'None'}));
@@ -47,20 +47,17 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use('/auth', loginRouter);
-app.use('/protected', protectedRouter);
-app.use('/webhook', webhookRouter)
+app.use('/:name/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/:name/auth', loginRouter);
+app.use('/:name/protected', protectedRouter);
+app.use('/:name/webhook', webhookRouter)
 
 
-app.listen(port, () => {
-    console.log(`API server listening at http://localhost:${port}`);
-});
+app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
 
-app.get('/', (req, res) => {
+app.get('/:name', (req, res) => {
 
-    const a = req.cookies
-    res.json(a);
+    res.json('test');
 });
 
 
