@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const CREDENTIALS = require('./credentials');
+require('dotenv').config();
+
+const JWT_SECRET = process.env.JWT_SECRET
 const db = require("./models");
 
 
@@ -53,7 +55,7 @@ router.post('/register', async (req, res) => {
     }).then(user => {
         console.log('User created:', user.toJSON());
     });
-    const token = jwt.sign({username: username}, CREDENTIALS.jwtSecret, {expiresIn: '1h'});
+    const token = jwt.sign({username: username}, JWT_SECRET, {expiresIn: '1h'});
     res.cookie('token', token)
     res.json({message: 'User registered successfully', token: token});
 });
@@ -90,7 +92,6 @@ router.post('/login', async (req, res) => {
             username: username
         }
     });
-    // const user = users.find(u => u.username === username);
     if (!user) {
         return res.status(400).json({message: 'Invalid username or password'});
     }
@@ -100,7 +101,7 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({message: 'Invalid username or password'});
     }
 
-    const token = jwt.sign({username: user.username}, CREDENTIALS.jwtSecret, {expiresIn: '1h'});
+    const token = jwt.sign({username: user.username}, JWT_SECRET, {expiresIn: '1h'});
     res.cookie('token', token)
     res.json({token});
 });

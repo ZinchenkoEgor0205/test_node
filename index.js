@@ -4,7 +4,7 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser');
 
 const {swaggerUi, swaggerSpec} = require('./swagger');
-const loginRouter = require('./login');
+const loginRouter = require('./auth');
 const protectedRouter = require('./protected')
 const webhookRouter = require('./webHook')
 const clientRouter = require('./clients');
