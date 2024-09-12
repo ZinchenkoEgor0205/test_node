@@ -7,6 +7,8 @@ const {swaggerUi, swaggerSpec} = require('./swagger');
 const loginRouter = require('./login');
 const protectedRouter = require('./protected')
 const webhookRouter = require('./webHook')
+const clientRouter = require('./clients');
+const analyticsRouter = require('./orders');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -51,6 +53,8 @@ app.use('/:name/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/:name/auth', loginRouter);
 app.use('/:name/protected', protectedRouter);
 app.use('/:name/webhook', webhookRouter)
+app.use('/:name/clients', clientRouter);
+app.use('/:name/orders', analyticsRouter);
 
 
 app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
